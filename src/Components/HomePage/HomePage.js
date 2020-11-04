@@ -1,7 +1,5 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import Container from 'react-bootstrap/Container';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import "./HomePage.css";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,34 +9,70 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { FaUpload } from 'react-icons/fa';
 import { RiDashboard3Fill, RiUploadCloudFill, RiMenuLine } from "react-icons/ri";
+import axios from 'axios';
 
+function Home(props) {
 
-function home(props) {
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const onFileChange = event => {
+
+        // Update the state 
+        setSelectedFile(event.target.files[0]);
+
+    };
+    // On file upload (click the upload button) 
+    const onFileUpload = () => {
+
+        // Create an object of formData 
+        const formData = new FormData();
+
+        // Update the formData object 
+        formData.append(
+            "file",
+            selectedFile,
+        );
+
+        // Details of the uploaded file 
+        console.log(selectedFile);
+
+        // Request made to the backend api 
+        // Send formData object 
+        axios.post("http://127.0.0.1:5000/upload/video", formData).then(res => {
+            const persons = res.data;
+            console.log(persons)
+            props.history.push({
+                pathname: '/dashboard',
+                state: { detail: selectedFile.name }
+              })
+          })
+    }
+
     return (
         <Container>
-            <Row>
-                <div class="TitleColor">
-                    <Col style={{ marginLeft: "7rem" }}>
+            <Row className="justify-content-center">
+
+                <Col style={{ marginLeft: '20%' }}>
+                    <div class="TitleColor">
                         <h2>MULTIMEDIA SENTIMENT ANALYSIS</h2>
-                    </Col>
-                </div>
+                    </div>
+                </Col>
+
 
                 <Card class="card_upload" style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                     <h1> Upload video</h1>
                     <Row>
                         <Col>
-                            <input type="file" style={{ paddingLeft: "5rem" }} /><br />
+                            <input type="file" style={{ paddingLeft: "5rem" }} onChange={onFileChange} /><br />
                         </Col>
                         <br />
 
                         <Col style={{ display: "flex", justifyContent: "center" }}>
                             <CardActions>
                                 <Button
-
+                                    onClick={onFileUpload}
                                     variant="contained"
-                                    color="primary"
-
-                                >
+                                    color="primary">
                                     <RiUploadCloudFill style={{ padding: "0.25rem" }} />Upload
                                 </Button>
                                 <br />
@@ -52,7 +86,7 @@ function home(props) {
 
 
                 <div>
-                    <Col style={{ float: "center", width: "20%", paddingRight: "10rem", marginTop: "-22.25rem" }}>
+                    <Col style={{ float: "center", width: "20%", paddingRight: "10rem", marginTop: "-21rem" }}>
                         <Card class="card_list">
                             <List>
                                 <ListItemIcon style={{ display: "flex", justifyContent: "left" }} >
@@ -94,4 +128,4 @@ function home(props) {
 
 
 
-export default home;
+export default Home;

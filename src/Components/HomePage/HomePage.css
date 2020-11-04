@@ -1,17 +1,21 @@
 .TitleColor {
     color:rgb(64, 64, 165);
-
+   
+    text-align: center;
+    align-items: center;
+    align-content: center;
+   
 }
 
 .card_list{
     background-color:rgba(180, 160, 160, 0.342);
-    height: 40rem;
+    height: 100rem;
 }
 
 .card_upload{
     width: 30rem;
     padding-right: 2rem;
-    margin-left: 30rem;
+    margin-left: 26rem;
     margin-top: 5rem;
     padding-top: 1rem;
 }
